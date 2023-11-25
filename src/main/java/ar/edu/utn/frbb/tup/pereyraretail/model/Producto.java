@@ -1,11 +1,10 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 
 public class Producto {
-    private final AtomicLong idGen = new AtomicLong();
-    final private Long id;
+    private UUID id;
     private String codigo;
     private String nombre;
     private String marca;
@@ -15,7 +14,7 @@ public class Producto {
     private ArrayList<Especificacion> specs;
 
     public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion, ArrayList<Especificacion> specs) {
-        this.id = idGen.incrementAndGet();
+        this.id = UUID.randomUUID();
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
@@ -27,14 +26,23 @@ public class Producto {
 
     public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion) {
         this(codigo, nombre, marca, precio, tipo, descripcion, new ArrayList<>());
+        this.id = UUID.randomUUID();
     }
 
     public Producto(String codigo, String nombre, String marca, Double precio) {
         this(codigo, nombre, marca, precio, "", "", new ArrayList<>());
+        this.id = UUID.randomUUID();
     }
 
     public Producto(){
-        this.id = idGen.incrementAndGet();
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
+        return this.id;
+    }
+    public void setId(UUID uuid) {
+        this.id = uuid;
     }
 
     public String getNombre() {
@@ -100,7 +108,8 @@ public class Producto {
     @Override
     public String toString() {
         return "Producto{" +
-                "codigo='" + codigo + '\'' +
+                "id='" + id + '\'' +
+                ", codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", marca='" + marca + '\'' +
                 ", tipo='" + tipo + '\'' +
