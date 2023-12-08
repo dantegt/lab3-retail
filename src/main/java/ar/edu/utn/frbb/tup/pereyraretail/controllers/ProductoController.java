@@ -3,6 +3,8 @@ package ar.edu.utn.frbb.tup.pereyraretail.controllers;
 import ar.edu.utn.frbb.tup.pereyraretail.business.CategoriaBusiness;
 import ar.edu.utn.frbb.tup.pereyraretail.business.ProductoBusiness;
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.InvalidUuidException;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,11 +40,19 @@ public class ProductoController {
     @GetMapping("/{id}")
     public Producto producto (
             @Parameter(description = "Id del producto")
-            @PathVariable("id") String id) {
-        Producto producto = productoBusiness.getProducto(UUID.fromString(id));
-        if(producto == null) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No se encontró el producto"
-        );
+            @PathVariable("id") String id) throws ItemNotFoundException, InvalidUuidException {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException err) {
+            throw new InvalidUuidException("El UUID ingresado no es válido", err);
+        }
+
+        Producto producto = productoBusiness.getProducto(uuid);
+
+        if(producto == null) {
+            throw new ItemNotFoundException("No se encontró el producto");
+        }
         return producto;
     }
 
@@ -50,14 +60,14 @@ public class ProductoController {
     @GetMapping("/categoria/{categoria}")
     public ArrayList<Producto> productosPorCategoria (
             @Parameter(description = "Categoria del producto")
-            @PathVariable("categoria") String categoria) {
-        if(!categoriaBusiness.existeCategoria(categoria)) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No existe esa categoria"
-        );
+            @PathVariable("categoria") String categoria) throws ItemNotFoundException {
+        if(!categoriaBusiness.existeCategoria(categoria)) {
+            throw new ItemNotFoundException("No existe esa categoria");
+        }
         ArrayList<Producto> productos = productoBusiness.getProductosPorCategoria(categoria);
-        if(productos.size() == 0) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No hay productos en esa categoria"
-        );
+        if(productos.size() == 0) {
+            throw new ItemNotFoundException("No hay productos en esa categoria");
+        }
         return productos;
     }
 

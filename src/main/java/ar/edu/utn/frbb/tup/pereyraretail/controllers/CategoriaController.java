@@ -2,6 +2,8 @@ package ar.edu.utn.frbb.tup.pereyraretail.controllers;
 
 import ar.edu.utn.frbb.tup.pereyraretail.business.CategoriaBusiness;
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.InvalidUuidException;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,11 +36,18 @@ public class CategoriaController {
     @GetMapping("/id/{id}")
     public Categoria categoriaId (
             @Parameter(description = "Id de la categoria")
-            @PathVariable("id") String id) {
-        Categoria categoria = categoriaBusiness.getCategoria(UUID.fromString(id));
-        if(categoria == null) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No se encontró la categoria"
-        );
+            @PathVariable("id") String id) throws ItemNotFoundException, InvalidUuidException {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException err) {
+            throw new InvalidUuidException("El UUID ingresado no es válido", err);
+        }
+
+        Categoria categoria = categoriaBusiness.getCategoria(uuid);
+        if(categoria == null) {
+            throw new ItemNotFoundException("No se encontró la categoria");
+        }
         return categoria;
     }
 
@@ -46,11 +55,11 @@ public class CategoriaController {
     @GetMapping("/{nombre}")
     public Categoria categoriaNombre (
             @Parameter(description = "Nombre de la categoria")
-            @PathVariable("nombre") String nombre) {
+            @PathVariable("nombre") String nombre) throws ItemNotFoundException {
         Categoria categoria = categoriaBusiness.getCategoriaNombre(nombre);
-        if(categoria == null) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No se encontró la categoria"
-        );
+        if(categoria == null) {
+            throw new ItemNotFoundException("No se encontró la categoria");
+        }
         return categoria;
     }
 
@@ -58,11 +67,11 @@ public class CategoriaController {
     @GetMapping("/buscar/{nombre}")
     public ArrayList<Categoria> categoriasBuscar (
             @Parameter(description = "Nombre de la categoria")
-            @PathVariable("nombre") String nombre) {
+            @PathVariable("nombre") String nombre) throws ItemNotFoundException {
         ArrayList<Categoria> categorias = categoriaBusiness.buscarCategorias(nombre);
-        if(categorias.size() == 0) throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "No hay categorias con ese nombre"
-        );
+        if(categorias.size() == 0) {
+            throw new ItemNotFoundException("No hay categorias con ese nombre");
+        }
         return categorias;
     }
 
