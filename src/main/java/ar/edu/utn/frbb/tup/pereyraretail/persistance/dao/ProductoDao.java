@@ -11,4 +11,6 @@ public interface ProductoDao {
     Producto update(Producto p);
     boolean delete(String id);
     ArrayList<Producto> listAll();
+    ArrayList<Producto> listPorCategoria(String categoria);
+    ArrayList<Producto> searchProductos(String query);
 }

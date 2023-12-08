@@ -12,5 +12,7 @@ public interface ProductoBusiness {
     Producto updateProducto(AltaProductoDto productoDto);
     boolean deleteProducto(String id);
     ArrayList<Producto> listProductos();
-    ArrayList<Producto> searchProductos();
+    ArrayList<Producto> searchProductos(String query);
+
+    ArrayList<Producto> getProductosPorCategoria(String categoria);
 }

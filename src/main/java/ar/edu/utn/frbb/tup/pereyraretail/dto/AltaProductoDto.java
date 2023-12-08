@@ -3,7 +3,6 @@ package ar.edu.utn.frbb.tup.pereyraretail.dto;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Especificacion;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class AltaProductoDto {
     private String codigo;
@@ -13,7 +12,7 @@ public class AltaProductoDto {
     private Double precio;
     private String descripcion;
 
-    public AltaProductoDto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion, ArrayList<Especificacion> specs) {
+    public AltaProductoDto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;

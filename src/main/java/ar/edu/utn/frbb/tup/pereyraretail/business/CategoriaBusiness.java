@@ -2,17 +2,15 @@ package ar.edu.utn.frbb.tup.pereyraretail.business;
 
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
-import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CategoriaBusiness {
-    public Categoria altaCategoria(AltaCategoriaDto categoriaDto) {
-        Categoria categoria = new Categoria(categoriaDto.getNombre(), categoriaDto.getDescripcion());
-        return categoria;
-    }
+import java.util.ArrayList;
+import java.util.UUID;
 
- /*   public List<Producto> obtenerCategoria(String id, String order_price, String marca, String precio_min, String precio_max) {
-
-    }*/
+public interface CategoriaBusiness {
+    Categoria getCategoria(UUID uuid);
+    Categoria getCategoriaNombre(String nombre);
+    Categoria altaCategoria(AltaCategoriaDto categoriaDto);
+    ArrayList<Categoria> listCategorias();
+    ArrayList<Categoria> buscarCategorias(String nombre);
+    boolean existeCategoria(String categoria);
 }

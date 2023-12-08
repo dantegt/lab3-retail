@@ -23,4 +23,9 @@ public class AltaCategoriaDto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public AltaCategoriaDto(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 }

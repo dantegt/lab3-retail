@@ -27,12 +27,12 @@ public class ProductoBusinessImpl implements ProductoBusiness {
             productoDto.getDescripcion()
         );
 
-        return this.productoDao.save(prod);
+        return productoDao.save(prod);
     }
 
     @Override
     public Producto getProducto(UUID uuid) {
-        return this.productoDao.findById(uuid);
+        return productoDao.findById(uuid);
     }
 
     @Override
@@ -46,21 +46,26 @@ public class ProductoBusinessImpl implements ProductoBusiness {
             productoDto.getDescripcion()
         );
 
-        return this.productoDao.update(prod);
+        return productoDao.update(prod);
     }
 
     @Override
     public boolean deleteProducto(String id) {
-        return this.productoDao.delete(id);
+        return productoDao.delete(id);
     }
 
     @Override
     public ArrayList<Producto> listProductos() {
-        return null;
+        return productoDao.listAll();
     }
 
     @Override
-    public ArrayList<Producto> searchProductos() {
-        return null;
+    public ArrayList<Producto> getProductosPorCategoria(String categoria) {
+        return this.productoDao.listPorCategoria(categoria);
+    }
+
+    @Override
+    public ArrayList<Producto> searchProductos(String query) {
+        return productoDao.searchProductos(query);
     }
 }

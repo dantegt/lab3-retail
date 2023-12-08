@@ -1,21 +1,18 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 
 public class Categoria {
-    private Long id;
+    private UUID id;
 	private String nombre;
 	private String descripcion;
-	private ArrayList<Producto> ListaProductos;
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId() {
+		this.id = UUID.randomUUID();
 	}
 
 	public String getNombre() {
@@ -34,29 +31,18 @@ public class Categoria {
 		this.descripcion = descripcion;
 	}
 
-	public ArrayList<Producto> getListaProductos() {
-		return ListaProductos;
+	public Categoria () {
+		this.setId();
 	}
-
-	public void setListaProductos(ArrayList<Producto> listaProductos) {
-		ListaProductos = listaProductos;
-	}
-
-	public Categoria () {}
 
 	public Categoria(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.id = new AtomicLong().incrementAndGet();
+		this.setId();
 	}
 
 	public Categoria(String nombre) {
 		this(nombre, "");
-	}
-
-	public Producto agregarProducto(Producto producto) {
-		List<Producto> lista = this.getListaProductos();
-		lista.add(producto);
-		return producto;
+		this.setId();
 	}
 }

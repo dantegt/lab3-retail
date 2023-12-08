@@ -2,10 +2,12 @@ package ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.impl;
 
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.ProductoDao;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+@Component
 public class InMemoryProductoDao implements ProductoDao {
 
     private final ArrayList<Producto> productos = new ArrayList<>();
@@ -67,5 +69,35 @@ public class InMemoryProductoDao implements ProductoDao {
     @Override
     public ArrayList<Producto> listAll() {
         return productos;
+    }
+
+    @Override
+    public ArrayList<Producto> searchProductos(String query) {
+        ArrayList<Producto> filtered = new ArrayList<>();
+        for(Producto producto: productos) {
+            if (this.compareSearch(producto, query)) {
+                filtered.add(producto);
+            }
+        }
+        return filtered;
+    }
+
+    @Override
+    public ArrayList<Producto> listPorCategoria(String categoria) {
+        ArrayList<Producto> filtered = new ArrayList<>();
+        for(Producto producto: productos) {
+            boolean matchesCategoria = producto.getTipo().equalsIgnoreCase(categoria);
+            if (matchesCategoria) {
+                filtered.add(producto);
+            }
+        }
+        return filtered;
+    }
+
+    private boolean compareSearch(Producto producto, String query) {
+        boolean matchesNombre = producto.getNombre().toLowerCase().contains(query.toLowerCase());
+        boolean matchesMarca = producto.getMarca().toLowerCase().contains(query.toLowerCase());
+        boolean matchesCodigo = producto.getCodigo().toLowerCase().contains(query.toLowerCase());
+        return matchesNombre || matchesMarca || matchesCodigo;
     }
 }
