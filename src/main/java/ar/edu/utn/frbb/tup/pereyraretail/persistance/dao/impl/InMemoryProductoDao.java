@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.impl;
 
+import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.ProductoDao;
 import org.springframework.stereotype.Component;
@@ -38,25 +39,23 @@ public class InMemoryProductoDao implements ProductoDao {
     }
 
     @Override
-    public Producto update(Producto p) {
-        Producto productoUpdate = this.findById(p.getId());
-        if (productoUpdate == null) {
-            return null;
+    public Producto update(AltaProductoDto p, UUID uuid) {
+        for(Producto producto: productos) {
+            if (producto.getId().equals(uuid)) {
+                producto.setCodigo(p.getCodigo());
+                producto.setNombre(p.getNombre());
+                producto.setMarca(p.getMarca());
+                producto.setTipo(p.getTipo());
+                producto.setPrecio(p.getPrecio());
+                producto.setDescripcion(p.getDescripcion());
+                return producto;
+            }
         }
-
-        productoUpdate.setNombre(p.getNombre());
-        productoUpdate.setMarca(p.getMarca());
-        productoUpdate.setTipo(p.getTipo());
-        productoUpdate.setPrecio(p.getPrecio());
-        productoUpdate.setDescripcion(p.getDescripcion());
-        productoUpdate.setSpecsList(p.getSpecsList());
-
-        return productoUpdate;
+        return null;
     }
 
     @Override
-    public boolean delete(String id) {
-        UUID uuid = UUID.fromString(id);
+    public boolean delete(UUID uuid) {
         for(Producto producto: productos) {
             if (producto.getId().equals(uuid)) {
                 productos.remove(producto);

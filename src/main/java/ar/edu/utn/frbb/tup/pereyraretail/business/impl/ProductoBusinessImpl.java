@@ -36,22 +36,13 @@ public class ProductoBusinessImpl implements ProductoBusiness {
     }
 
     @Override
-    public Producto updateProducto(AltaProductoDto productoDto) {
-        Producto prod = new Producto(
-            productoDto.getCodigo(),
-            productoDto.getNombre(),
-            productoDto.getMarca(),
-            productoDto.getPrecio(),
-            productoDto.getTipo(),
-            productoDto.getDescripcion()
-        );
-
-        return productoDao.update(prod);
+    public Producto updateProducto(AltaProductoDto productoDto, UUID uuid) {
+        return productoDao.update(productoDto, uuid);
     }
 
     @Override
-    public boolean deleteProducto(String id) {
-        return productoDao.delete(id);
+    public boolean borrarProducto(UUID uuid) {
+        return productoDao.delete(uuid);
     }
 
     @Override
@@ -68,4 +59,5 @@ public class ProductoBusinessImpl implements ProductoBusiness {
     public ArrayList<Producto> searchProductos(String query) {
         return productoDao.searchProductos(query);
     }
+
 }

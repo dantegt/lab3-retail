@@ -1,27 +1,23 @@
 package ar.edu.utn.frbb.tup.pereyraretail.dto;
 
-public class AltaCategoriaDto {
-    private String nombre;
-    private String descripcion;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-    public AltaCategoriaDto(String nombre) {
-        this.nombre = nombre;
-    }
+public class AltaCategoriaDto {
+    @Schema(name = "nombre", example = "Hogar")
+    private String nombre;
+    @Schema(name = "descripcion", example = "Todo para equipar tu Hogar.")
+    private String descripcion;
 
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public AltaCategoriaDto() {
+        super();
     }
 
     public AltaCategoriaDto(String nombre, String descripcion) {

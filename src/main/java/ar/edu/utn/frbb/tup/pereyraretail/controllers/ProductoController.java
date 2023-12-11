@@ -2,18 +2,21 @@ package ar.edu.utn.frbb.tup.pereyraretail.controllers;
 
 import ar.edu.utn.frbb.tup.pereyraretail.business.CategoriaBusiness;
 import ar.edu.utn.frbb.tup.pereyraretail.business.ProductoBusiness;
+import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
 import ar.edu.utn.frbb.tup.pereyraretail.exceptions.InvalidUuidException;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemExistsException;
 import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
+import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -57,7 +60,7 @@ public class ProductoController {
     }
 
     @Operation(summary = "Ver lista de productos por categoria")
-    @GetMapping("/categoria/{categoria}")
+    @GetMapping("/categoria/{categoria:[a-zA-Z0-9]*}")
     public ArrayList<Producto> productosPorCategoria (
             @Parameter(description = "Categoria del producto")
             @PathVariable("categoria") String categoria) throws ItemNotFoundException {
@@ -86,5 +89,49 @@ public class ProductoController {
             productoBusiness.crearProducto(producto);
         }
         return productoBusiness.listProductos();
+    }
+
+    @Operation(summary = "Crear un producto")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Producto productoCrear (
+            @RequestBody AltaProductoDto dto) {
+        return productoBusiness.crearProducto(dto);
+    }
+
+    @Operation(summary = "Editar un producto")
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Producto productoEditar (
+            @PathVariable("id") String id,
+            @RequestBody AltaProductoDto dto) throws ItemNotFoundException, InvalidUuidException {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException err) {
+            throw new InvalidUuidException("El UUID ingresado no es válido", err);
+        }
+
+        if(productoBusiness.getProducto(uuid) == null) {
+            throw new ItemNotFoundException("No existe ese producto");
+        }
+        return productoBusiness.updateProducto(dto, uuid);
+    }
+
+    @Operation(summary = "Borrar la producto con {id}")
+    @DeleteMapping("/{id}")
+    public ResponseEntity productoBorrar (
+            @Parameter(description = "Id de la producto")
+            @PathVariable("id") String id) throws ItemNotFoundException {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException err) {
+            throw new InvalidUuidException("El UUID ingresado no es válido", err);
+        }
+
+        boolean borrado = productoBusiness.borrarProducto(uuid);
+        if(!borrado) {
+            throw new ItemNotFoundException("No se encontró la producto");
+        }
+        return new ResponseEntity<>("Accepted", HttpStatus.ACCEPTED);
     }
 }

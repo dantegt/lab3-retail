@@ -14,7 +14,6 @@ public class Producto {
     private ArrayList<Especificacion> specs;
 
     public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion, ArrayList<Especificacion> specs) {
-        this.setId();
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
@@ -22,27 +21,26 @@ public class Producto {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.specs = specs;
+        this.id = UUID.randomUUID();
     }
 
     public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion) {
         this(codigo, nombre, marca, precio, tipo, descripcion, new ArrayList<>());
-        this.setId();
     }
 
     public Producto(String codigo, String nombre, String marca, Double precio) {
         this(codigo, nombre, marca, precio, "", "", new ArrayList<>());
-        this.setId();
     }
 
     public Producto(){
-        this.setId();
+        this.id = UUID.randomUUID();
     }
 
     public UUID getId() {
         return this.id;
     }
-    public void setId() {
-        this.id = UUID.randomUUID();
+    public void setId(UUID uuid) {
+        this.id = uuid;
     }
 
     public String getNombre() {
@@ -56,6 +54,11 @@ public class Producto {
     public String getCodigo() {
         return codigo;
     }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
 
     public String getMarca() {
         return marca;
@@ -83,6 +86,9 @@ public class Producto {
 
     public String getDescripcion() {
         return descripcion;
+    }
+    public void setSpecs(ArrayList<Especificacion> specs) {
+        this.specs = specs;
     }
 
     public void setDescripcion(String descripcion) {

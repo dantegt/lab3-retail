@@ -10,7 +10,11 @@ public interface CategoriaBusiness {
     Categoria getCategoria(UUID uuid);
     Categoria getCategoriaNombre(String nombre);
     Categoria altaCategoria(AltaCategoriaDto categoriaDto);
+    Categoria editarCategoria(AltaCategoriaDto dto, UUID uuid);
     ArrayList<Categoria> listCategorias();
+
+    boolean borrarCategoria(UUID uuid);
+
     ArrayList<Categoria> buscarCategorias(String nombre);
     boolean existeCategoria(String categoria);
 }

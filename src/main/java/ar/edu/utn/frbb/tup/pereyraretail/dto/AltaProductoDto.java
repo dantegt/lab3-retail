@@ -1,15 +1,22 @@
 package ar.edu.utn.frbb.tup.pereyraretail.dto;
 
 import ar.edu.utn.frbb.tup.pereyraretail.model.Especificacion;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
 
 public class AltaProductoDto {
+    @Schema(name = "codigo", example = "AZ-909")
     private String codigo;
+    @Schema(name = "nombre", example = "Bicicleta RX-90")
     private String nombre;
+    @Schema(name = "marca", example = "Speed-Way")
     private String marca;
+    @Schema(name = "tipo", example = "Vehiculos", allowableValues= { "Hogar", "Vehiculos" })
     private String tipo;
+    @Schema(name = "precio", example = "19999.99")
     private Double precio;
+    @Schema(name = "descripcion", example = "Bicicleta todo terreno!")
     private String descripcion;
 
     public AltaProductoDto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion) {

@@ -46,8 +46,17 @@ public class CategoriaBusinessImpl implements CategoriaBusiness {
     }
 
     @Override
+    public Categoria editarCategoria(AltaCategoriaDto dto, UUID uuid) {
+        return categoriaDao.update(dto, uuid);
+    }
+
+    @Override
     public ArrayList<Categoria> listCategorias() {
         return categoriaDao.listAll();
+    }
+    @Override
+    public boolean borrarCategoria(UUID uuid) {
+       return categoriaDao.delete(uuid);
     }
 
     @Override

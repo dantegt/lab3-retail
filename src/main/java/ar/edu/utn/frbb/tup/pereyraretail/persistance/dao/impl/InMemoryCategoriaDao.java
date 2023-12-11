@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.impl;
 
+import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.CategoriaDao;
 import org.springframework.stereotype.Component;
@@ -43,21 +44,19 @@ public class InMemoryCategoriaDao implements CategoriaDao {
     }
 
     @Override
-    public Categoria update(Categoria c) {
-        Categoria categoriaUpdate = this.findById(c.getId());
-        if (categoriaUpdate == null) {
-            return null;
+    public Categoria update(AltaCategoriaDto c, UUID uuid) {
+        for(Categoria categoria: categorias) {
+            if (categoria.getId().equals(uuid)) {
+                categoria.setNombre(c.getNombre());
+                categoria.setDescripcion(c.getDescripcion());
+                return categoria;
+            }
         }
-
-        categoriaUpdate.setNombre(c.getNombre());
-        categoriaUpdate.setDescripcion(c.getDescripcion());
-
-        return categoriaUpdate;
+        return null;
     }
 
     @Override
-    public boolean delete(String id) {
-        UUID uuid = UUID.fromString(id);
+    public boolean delete(UUID uuid) {
         for(Categoria categoria: categorias) {
             if (categoria.getId().equals(uuid)) {
                 categorias.remove(categoria);

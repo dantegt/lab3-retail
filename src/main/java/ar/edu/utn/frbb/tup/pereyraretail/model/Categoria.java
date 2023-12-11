@@ -11,8 +11,8 @@ public class Categoria {
 		return id;
 	}
 
-	public void setId() {
-		this.id = UUID.randomUUID();
+	public void setId(UUID uuid) {
+		this.id = uuid;
 	}
 
 	public String getNombre() {
@@ -32,17 +32,16 @@ public class Categoria {
 	}
 
 	public Categoria () {
-		this.setId();
+		this.id = UUID.randomUUID();
 	}
 
 	public Categoria(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.setId();
+		this.id = UUID.randomUUID();
 	}
 
 	public Categoria(String nombre) {
 		this(nombre, "");
-		this.setId();
 	}
 }

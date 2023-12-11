@@ -9,10 +9,9 @@ import java.util.UUID;
 public interface ProductoBusiness {
     Producto crearProducto(AltaProductoDto productoDto);
     Producto getProducto(UUID uuid);
-    Producto updateProducto(AltaProductoDto productoDto);
-    boolean deleteProducto(String id);
+    Producto updateProducto(AltaProductoDto productoDto, UUID uuid);
+    boolean borrarProducto(UUID uuid);
     ArrayList<Producto> listProductos();
     ArrayList<Producto> searchProductos(String query);
-
     ArrayList<Producto> getProductosPorCategoria(String categoria);
 }
