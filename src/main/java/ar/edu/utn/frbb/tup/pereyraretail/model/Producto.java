@@ -8,24 +8,24 @@ public class Producto {
     private String codigo;
     private String nombre;
     private String marca;
-    private String tipo;
+    private String categoria;
     private Double precio;
     private String descripcion;
     private ArrayList<Especificacion> specs;
 
-    public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion, ArrayList<Especificacion> specs) {
+    public Producto(String codigo, String nombre, String marca, Double precio, String categoria, String descripcion, ArrayList<Especificacion> specs) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
         this.precio = precio;
-        this.tipo = tipo;
+        this.categoria = categoria;
         this.descripcion = descripcion;
         this.specs = specs;
         this.id = UUID.randomUUID();
     }
 
-    public Producto(String codigo, String nombre, String marca, Double precio, String tipo, String descripcion) {
-        this(codigo, nombre, marca, precio, tipo, descripcion, new ArrayList<>());
+    public Producto(String codigo, String nombre, String marca, Double precio, String categoria, String descripcion) {
+        this(codigo, nombre, marca, precio, categoria, descripcion, new ArrayList<>());
     }
 
     public Producto(String codigo, String nombre, String marca, Double precio) {
@@ -68,12 +68,12 @@ public class Producto {
         this.marca = marca;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public Double getPrecio() {
@@ -118,7 +118,7 @@ public class Producto {
                 ", codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", marca='" + marca + '\'' +
-                ", tipo='" + tipo + '\'' +
+                ", categoria='" + categoria + '\'' +
                 ", precio=" + precio +
                 ", descripcion='" + descripcion + '\'' +
                 ", specs=" + specs +

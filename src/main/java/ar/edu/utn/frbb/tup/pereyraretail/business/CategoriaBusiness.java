@@ -1,20 +1,20 @@
 package ar.edu.utn.frbb.tup.pereyraretail.business;
 
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemExistsException;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public interface CategoriaBusiness {
-    Categoria getCategoria(UUID uuid);
-    Categoria getCategoriaNombre(String nombre);
-    Categoria altaCategoria(AltaCategoriaDto categoriaDto);
-    Categoria editarCategoria(AltaCategoriaDto dto, UUID uuid);
+    Categoria getCategoria(String id) throws ItemNotFoundException;
+    Categoria getCategoriaNombre(String nombre) throws ItemNotFoundException;
+    Categoria altaCategoria(AltaCategoriaDto categoriaDto) throws ItemExistsException, ItemNotFoundException;
+    Categoria editarCategoria(AltaCategoriaDto dto, String id) throws ItemNotFoundException;
+    boolean borrarCategoria(String id) throws ItemNotFoundException;
     ArrayList<Categoria> listCategorias();
-
-    boolean borrarCategoria(UUID uuid);
-
-    ArrayList<Categoria> buscarCategorias(String nombre);
-    boolean existeCategoria(String categoria);
+    ArrayList<Categoria> buscarCategorias(String nombre) throws ItemNotFoundException;
+    boolean existeCategoria(String categoria, boolean debeExistir) throws ItemNotFoundException, ItemExistsException;
+    ArrayList<Categoria> mockCategorias() throws ItemExistsException, ItemNotFoundException;
 }

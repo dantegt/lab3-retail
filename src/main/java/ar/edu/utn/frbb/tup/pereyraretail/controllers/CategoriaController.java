@@ -8,16 +8,15 @@ import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/categoria")
@@ -37,18 +36,7 @@ public class CategoriaController {
     public Categoria categoriaId (
             @Parameter(description = "Id de la categoria")
             @PathVariable("id") String id) throws ItemNotFoundException {
-        UUID uuid;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException err) {
-            throw new InvalidUuidException("El UUID ingresado no es válido", err);
-        }
-
-        Categoria categoria = categoriaBusiness.getCategoria(uuid);
-        if(categoria == null) {
-            throw new ItemNotFoundException("No se encontró la categoria");
-        }
-        return categoria;
+        return categoriaBusiness.getCategoria(id);
     }
 
     @Operation(summary = "Ver la categoria por {nombre}")
@@ -68,71 +56,43 @@ public class CategoriaController {
     public ArrayList<Categoria> categoriasBuscar (
             @Parameter(description = "Nombre de la categoria")
             @PathVariable("nombre") String nombre) throws ItemNotFoundException {
-        ArrayList<Categoria> categorias = categoriaBusiness.buscarCategorias(nombre);
-        if(categorias.size() == 0) {
-            throw new ItemNotFoundException("No hay categorias con ese nombre");
-        }
-        return categorias;
+        return categoriaBusiness.buscarCategorias(nombre);
     }
 
     @Operation(summary = "Crear una categoria")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Categoria categoriaCrear (
-            @RequestBody AltaCategoriaDto dto) throws ItemExistsException {
-        if(categoriaBusiness.existeCategoria(dto.getNombre())) {
-            throw new ItemExistsException("Existe esa categoria");
-        }
+            @Valid @RequestBody AltaCategoriaDto dto) throws ItemExistsException, ItemNotFoundException {
+        boolean yaExiste = categoriaBusiness.existeCategoria(dto.getNombre(), false);
         return categoriaBusiness.altaCategoria(dto);
     }
 
     @Operation(summary = "Editar una categoria")
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Categoria categoriaEditar (
-            @RequestBody AltaCategoriaDto dto,
+    public ResponseEntity<Categoria> categoriaEditar (
+            @Valid @RequestBody AltaCategoriaDto dto,
             @Parameter(description = "Id de la categoria")
             @PathVariable("id") String id) throws ItemNotFoundException, InvalidUuidException {
-        UUID uuid;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException err) {
-            throw new InvalidUuidException("El UUID ingresado no es válido", err);
-        }
-
-        if(categoriaBusiness.getCategoria(uuid) == null) {
-            throw new ItemNotFoundException("No existe esa categoria");
-        }
-        return categoriaBusiness.editarCategoria(dto, uuid);
+        Categoria categoriaEditada = categoriaBusiness.editarCategoria(dto, id);
+        return ResponseEntity.ok(categoriaEditada);
     }
 
     @Operation(summary = "Borrar la categoria con {id}")
     @DeleteMapping("/{id}")
-    public ResponseEntity categoriaBorrarId (
+    public ResponseEntity<Object> categoriaBorrarId (
             @Parameter(description = "Id de la categoria")
             @PathVariable("id") String id) throws ItemNotFoundException, InvalidUuidException {
-        UUID uuid;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException err) {
-            throw new InvalidUuidException("El UUID ingresado no es válido", err);
-        }
-
-        boolean borrado = categoriaBusiness.borrarCategoria(uuid);
+        boolean borrado = categoriaBusiness.borrarCategoria(id);
         if(!borrado) {
             throw new ItemNotFoundException("No se encontró la categoria");
         }
-        return new ResponseEntity<>("Accepted", HttpStatus.ACCEPTED);
+        return ResponseEntity.accepted().body("Borrado");
     }
 
     @Operation(summary = "Agregar mock data de Categorias y Categorias")
     @GetMapping("/mock")
-    public ArrayList<Categoria> agregarMockCategorias () {
-        List<AltaCategoriaDto> lista = new ArrayList<>();
-        lista.add(new AltaCategoriaDto("Vehiculos", "Todos los vehiculos"));
-        lista.add(new AltaCategoriaDto("Electrodomesticos", "Mejora tu hogar"));
-        lista.add(new AltaCategoriaDto("Muebles", "Mejora tu hogar"));
-        for(AltaCategoriaDto categoria: lista) {
-            categoriaBusiness.altaCategoria(categoria);
-        }
-        return categoriaBusiness.listCategorias();
+    public ResponseEntity<ArrayList<Categoria>> agregarMockCategorias () throws ItemExistsException, ItemNotFoundException {
+        ArrayList<Categoria> categorias = categoriaBusiness.mockCategorias();
+        return ResponseEntity.status(HttpStatus.CREATED).body(categorias);
     }
 }

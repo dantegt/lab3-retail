@@ -20,7 +20,7 @@ public class InMemoryProductoDao implements ProductoDao {
                 p.getNombre(),
                 p.getMarca(),
                 p.getPrecio(),
-                p.getTipo(),
+                p.getCategoria(),
                 p.getDescripcion(),
                 p.getSpecsList()
         );
@@ -45,7 +45,7 @@ public class InMemoryProductoDao implements ProductoDao {
                 producto.setCodigo(p.getCodigo());
                 producto.setNombre(p.getNombre());
                 producto.setMarca(p.getMarca());
-                producto.setTipo(p.getTipo());
+                producto.setCategoria(p.getCategoria());
                 producto.setPrecio(p.getPrecio());
                 producto.setDescripcion(p.getDescripcion());
                 return producto;
@@ -85,7 +85,7 @@ public class InMemoryProductoDao implements ProductoDao {
     public ArrayList<Producto> listPorCategoria(String categoria) {
         ArrayList<Producto> filtered = new ArrayList<>();
         for(Producto producto: productos) {
-            boolean matchesCategoria = producto.getTipo().equalsIgnoreCase(categoria);
+            boolean matchesCategoria = producto.getCategoria().equalsIgnoreCase(categoria);
             if (matchesCategoria) {
                 filtered.add(producto);
             }

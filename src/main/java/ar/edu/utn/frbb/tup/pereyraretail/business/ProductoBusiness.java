@@ -1,17 +1,18 @@
 package ar.edu.utn.frbb.tup.pereyraretail.business;
 
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public interface ProductoBusiness {
     Producto crearProducto(AltaProductoDto productoDto);
-    Producto getProducto(UUID uuid);
-    Producto updateProducto(AltaProductoDto productoDto, UUID uuid);
-    boolean borrarProducto(UUID uuid);
+    Producto getProducto(String id) throws ItemNotFoundException;
+    Producto updateProducto(AltaProductoDto productoDto, String id) throws ItemNotFoundException;
+    void borrarProducto(String id) throws ItemNotFoundException;
     ArrayList<Producto> listProductos();
     ArrayList<Producto> searchProductos(String query);
     ArrayList<Producto> getProductosPorCategoria(String categoria);
+    ArrayList<Producto> mockProductos();
 }
