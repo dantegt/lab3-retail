@@ -14,15 +14,14 @@ public class InMemoryProductoDao implements ProductoDao {
     private final ArrayList<Producto> productos = new ArrayList<>();
 
     @Override
-    public Producto save(Producto p) {
+    public Producto save(AltaProductoDto p) {
         Producto producto = new Producto(
                 p.getCodigo(),
                 p.getNombre(),
                 p.getMarca(),
                 p.getPrecio(),
                 p.getCategoria(),
-                p.getDescripcion(),
-                p.getSpecsList()
+                p.getDescripcion()
         );
         this.productos.add(producto);
         return producto;

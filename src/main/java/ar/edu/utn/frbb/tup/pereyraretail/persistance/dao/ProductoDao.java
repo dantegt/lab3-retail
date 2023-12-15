@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public interface ProductoDao {
-    Producto save(Producto p);
+    Producto save(AltaProductoDto p);
     Producto findById(UUID uuid);
     Producto update(AltaProductoDto p, UUID uuid);
     boolean delete(UUID id);

@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Categoria {
@@ -29,6 +30,19 @@ public class Categoria {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Categoria)) return false;
+		Categoria categoria = (Categoria) o;
+		return getNombre().equals(categoria.getNombre()) && getDescripcion().equals(categoria.getDescripcion());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getNombre(), getDescripcion());
 	}
 
 	public Categoria () {

@@ -36,7 +36,7 @@ public class AltaProductoDto {
     @PositiveOrZero(message = "Precio debe ser numérico, con decimales luego de un punto")
     @Schema(name = "precio", example = "19999.99")
     private Double precio;
-    
+
     @NotNull(message = "Descripción no puede ser nulo")
     @NotBlank(message = "Descripción no puede estar vacío")
     @Pattern(regexp = "[\\w-!\"#$%&'()*+,-./:;<=>?@\\[\\]_| ]*", message = "Descripción - Sólo caracteres alfanuméricos y guiones")

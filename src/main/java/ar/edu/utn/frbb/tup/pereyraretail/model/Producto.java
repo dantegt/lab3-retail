@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Producto {
@@ -109,6 +110,19 @@ public class Producto {
 
     public void setSpec(Especificacion spec) {
         this.specs.add(spec);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Producto)) return false;
+        Producto producto = (Producto) o;
+        return getCodigo().equals(producto.getCodigo()) && getNombre().equals(producto.getNombre()) && getMarca().equals(producto.getMarca()) && getCategoria().equals(producto.getCategoria()) && getPrecio().equals(producto.getPrecio()) && getDescripcion().equals(producto.getDescripcion());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCodigo(), getNombre(), getMarca(), getCategoria(), getPrecio(), getDescripcion());
     }
 
     @Override

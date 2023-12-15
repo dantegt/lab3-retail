@@ -21,16 +21,7 @@ public class ProductoBusinessImpl implements ProductoBusiness {
 
     @Override
     public Producto crearProducto(AltaProductoDto productoDto) {
-        Producto prod = new Producto(
-            productoDto.getCodigo(),
-            productoDto.getNombre(),
-            productoDto.getMarca(),
-            productoDto.getPrecio(),
-            productoDto.getCategoria(),
-            productoDto.getDescripcion()
-        );
-
-        return productoDao.save(prod);
+        return productoDao.save(productoDto);
     }
 
     @Override
