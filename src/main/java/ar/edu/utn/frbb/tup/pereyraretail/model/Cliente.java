@@ -1,6 +1,9 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
+import java.util.UUID;
+
 public class Cliente {
+    private UUID id;
     private String nombre;
     private String apellido;
     private String email;
@@ -15,6 +18,16 @@ public class Cliente {
         this.dni = dni;
         this.codigoArea = codigoArea;
         this.telefono = telefono;
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID id() {
+        return id;
+    }
+
+    public Cliente setId(UUID id) {
+        this.id = id;
+        return this;
     }
 
     public String nombre() {

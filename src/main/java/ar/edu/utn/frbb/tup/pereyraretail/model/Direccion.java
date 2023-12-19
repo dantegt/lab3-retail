@@ -1,6 +1,9 @@
 package ar.edu.utn.frbb.tup.pereyraretail.model;
 
+import java.util.UUID;
+
 public class Direccion {
+    private UUID id;
     private String calle;
     private String numero;
     private String tipo;
@@ -17,6 +20,16 @@ public class Direccion {
         this.provincia = provincia;
         this.ciudad = ciudad;
         this.codigoPostal = codigoPostal;
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID id() {
+        return id;
+    }
+
+    public Direccion setId(UUID id) {
+        this.id = id;
+        return this;
     }
 
     public String calle() {

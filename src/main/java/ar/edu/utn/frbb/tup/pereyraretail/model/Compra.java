@@ -2,26 +2,40 @@ package ar.edu.utn.frbb.tup.pereyraretail.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Compra {
+    private UUID id;
     private ArrayList<Item> items;
     private LocalDateTime fecha;
     private Cliente cliente;
     private String tipoPago;
     private String tipoEnvio;
+    private Direccion direccionEnvio;
     private Double subtotalItems;
     private Double costoEnvio;
     private Double total;
 
-    public Compra(ArrayList<Item> items, LocalDateTime fecha, Cliente cliente, String tipoPago, String tipoEnvio, Double subtotalItems, Double costoEnvio, Double total) {
+    public Compra(ArrayList<Item> items, LocalDateTime fecha, Cliente cliente, String tipoPago, String tipoEnvio, Direccion direccionEnvio, Double subtotalItems, Double costoEnvio, Double total) {
         this.items = items;
         this.fecha = fecha;
         this.cliente = cliente;
         this.tipoPago = tipoPago;
         this.tipoEnvio = tipoEnvio;
+        this.direccionEnvio = direccionEnvio;
         this.subtotalItems = subtotalItems;
         this.costoEnvio = costoEnvio;
         this.total = total;
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID id() {
+        return id;
+    }
+
+    public Compra setId(UUID id) {
+        this.id = id;
+        return this;
     }
 
     public ArrayList<Item> items() {
@@ -66,6 +80,15 @@ public class Compra {
 
     public Compra setTipoEnvio(String tipoEnvio) {
         this.tipoEnvio = tipoEnvio;
+        return this;
+    }
+
+    public Direccion direccionEnvio() {
+        return direccionEnvio;
+    }
+
+    public Compra setDireccionEnvio(Direccion direccionEnvio) {
+        this.direccionEnvio = direccionEnvio;
         return this;
     }
 
