@@ -1,9 +1,13 @@
 package ar.edu.utn.frbb.tup.pereyraretail.business.impl;
 
+import ar.edu.utn.frbb.tup.pereyraretail.business.CategoriaBusiness;
 import ar.edu.utn.frbb.tup.pereyraretail.business.ProductoBusiness;
+import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaCategoriaDto;
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
 import ar.edu.utn.frbb.tup.pereyraretail.exceptions.InvalidUuidException;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemExistsException;
 import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
+import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.ProductoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,13 @@ public class ProductoBusinessImpl implements ProductoBusiness {
     @Autowired
     ProductoDao productoDao;
 
+    @Autowired
+    CategoriaBusiness categoriaBusiness;
+
     @Override
-    public Producto crearProducto(AltaProductoDto productoDto) {
-        return productoDao.save(productoDto);
+    public Producto crearProducto(AltaProductoDto productoDto) throws ItemExistsException, ItemNotFoundException {
+        Categoria categoria = categoriaBusiness.getCategoriaNombre(productoDto.getCategoria());
+        return productoDao.save(productoDto, categoria);
     }
 
     @Override
@@ -38,7 +46,8 @@ public class ProductoBusinessImpl implements ProductoBusiness {
     public Producto updateProducto(AltaProductoDto productoDto, String id) throws ItemNotFoundException {
         UUID uuid = validUuid(id);
         Producto productoExiste = getProducto(id);
-        return productoDao.update(productoDto, uuid);
+        Categoria categoria = categoriaBusiness.getCategoriaNombre(productoDto.getCategoria());
+        return productoDao.update(productoDto, categoria, uuid);
     }
 
     @Override
@@ -59,7 +68,9 @@ public class ProductoBusinessImpl implements ProductoBusiness {
     }
 
     @Override
-    public ArrayList<Producto> mockProductos() {
+    public ArrayList<Producto> mockProductos() throws ItemExistsException, ItemNotFoundException {
+        categoriaBusiness.altaCategoria(new AltaCategoriaDto("Vehiculos", "Todos los automotores"));
+        categoriaBusiness.altaCategoria(new AltaCategoriaDto("Electrodomesticos", "Te simplifican la vida"));
         List<AltaProductoDto> lista = new ArrayList<>();
         lista.add(new AltaProductoDto("P001", "Monopatin S100", "Toyota", 12000.0 , "Vehiculos", "Monopatin de acero"));
         lista.add(new AltaProductoDto("P002", "Bicicleta BC2X", "Nero", 42000.0 , "Vehiculos", "Bicicleta Nero, te lleva a donde vos quieras"));

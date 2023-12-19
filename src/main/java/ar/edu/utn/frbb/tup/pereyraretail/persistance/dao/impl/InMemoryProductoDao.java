@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.impl;
 
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
+import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.ProductoDao;
 import org.springframework.stereotype.Component;
@@ -14,13 +15,13 @@ public class InMemoryProductoDao implements ProductoDao {
     private final ArrayList<Producto> productos = new ArrayList<>();
 
     @Override
-    public Producto save(AltaProductoDto p) {
+    public Producto save(AltaProductoDto p, Categoria categoria) {
         Producto producto = new Producto(
                 p.getCodigo(),
                 p.getNombre(),
                 p.getMarca(),
                 p.getPrecio(),
-                p.getCategoria(),
+                categoria,
                 p.getDescripcion()
         );
         this.productos.add(producto);
@@ -38,13 +39,14 @@ public class InMemoryProductoDao implements ProductoDao {
     }
 
     @Override
-    public Producto update(AltaProductoDto p, UUID uuid) {
+    public Producto update(AltaProductoDto p, Categoria categoria, UUID uuid) {
+
         for(Producto producto: productos) {
             if (producto.getId().equals(uuid)) {
                 producto.setCodigo(p.getCodigo());
                 producto.setNombre(p.getNombre());
                 producto.setMarca(p.getMarca());
-                producto.setCategoria(p.getCategoria());
+                producto.setCategoria(categoria);
                 producto.setPrecio(p.getPrecio());
                 producto.setDescripcion(p.getDescripcion());
                 return producto;

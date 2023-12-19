@@ -82,7 +82,7 @@ public class AltaProductoDto {
         return categoria;
     }
 
-    public void setTipo(String categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
@@ -100,5 +100,17 @@ public class AltaProductoDto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    @Override
+    public String toString() {
+        return "AltaProductoDto{" +
+                "codigo='" + codigo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", marca='" + marca + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", precio=" + precio +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
     }
 }

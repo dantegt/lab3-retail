@@ -2,7 +2,9 @@ package ar.edu.utn.frbb.tup.pereyraretail.business;
 
 import ar.edu.utn.frbb.tup.pereyraretail.business.impl.ProductoBusinessImpl;
 import ar.edu.utn.frbb.tup.pereyraretail.dto.AltaProductoDto;
+import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemExistsException;
 import ar.edu.utn.frbb.tup.pereyraretail.exceptions.ItemNotFoundException;
+import ar.edu.utn.frbb.tup.pereyraretail.model.Categoria;
 import ar.edu.utn.frbb.tup.pereyraretail.model.Producto;
 import ar.edu.utn.frbb.tup.pereyraretail.persistance.dao.ProductoDao;
 import org.junit.jupiter.api.DisplayName;
@@ -30,11 +32,12 @@ public class ProductoBusinessTest {
 
     @DisplayName("Crear un Producto desde el servicio")
     @Test
-    public void crearProductoBusinessTest() {
+    public void crearProductoBusinessTest() throws ItemExistsException, ItemNotFoundException {
+        Categoria categoria = new Categoria("Hogar", "Todo para el Hogar");
         AltaProductoDto altaProductoDto = new AltaProductoDto("Codigo", "Producto", "Marca", 199.99, "Hogar", "Descripcion");
-        Producto producto = new Producto("Codigo", "Producto", "Marca", 199.99, "Hogar", "Descripcion");
+        Producto producto = new Producto("Codigo", "Producto", "Marca", 199.99, categoria, "Descripcion");
 
-        Mockito.when(productoDaoMock.save(Mockito.<AltaProductoDto>any())).thenReturn(producto);
+        Mockito.when(productoDaoMock.save(Mockito.<AltaProductoDto>any(), Mockito.<Categoria>any())).thenReturn(producto);
 
         Producto resultado = business.crearProducto(altaProductoDto);
 
@@ -42,7 +45,7 @@ public class ProductoBusinessTest {
         assertEquals(resultado.getNombre(), altaProductoDto.getNombre());
         assertEquals(resultado.getMarca(), altaProductoDto.getMarca());
         assertEquals(resultado.getPrecio(), altaProductoDto.getPrecio());
-        assertEquals(resultado.getCategoria(), altaProductoDto.getCategoria());
+        assertEquals(resultado.getCategoria(), categoria);
         assertEquals(resultado.getDescripcion(), altaProductoDto.getDescripcion());
     }
 
@@ -50,22 +53,23 @@ public class ProductoBusinessTest {
     @Test
     public void editarProductoBusinessTest() throws ItemNotFoundException {
         String id = "d84338d4-9b3c-11ee-b9d1-0242ac120002";
+        Categoria categoria = new Categoria("Hogar", "Todo para el Hogar");
         AltaProductoDto altaProductoDto = new AltaProductoDto("Codigo", "Producto", "Marca", 199.99, "Hogar", "Descripcion");
-        Producto productoOriginal = new Producto("Codigo", "Producto", "Marca", 199.99, "Hogar", "Descripcion");
+        Producto productoOriginal = new Producto("Codigo", "Producto", "Marca", 199.99, categoria, "Descripcion");
         productoOriginal.setId(UUID.fromString(id));
         AltaProductoDto updateProductoDto = new AltaProductoDto("Codigo", "ProductoDiferente", "Marca", 188.99, "Hogar", "Descripcion");
-        Producto productoModificado = new Producto("Codigo", "ProductoDiferente", "Marca", 188.99, "Hogar", "Descripcion");
+        Producto productoModificado = new Producto("Codigo", "ProductoDiferente", "Marca", 188.99, categoria, "Descripcion");
         productoModificado.setId(UUID.fromString(id));
         Producto resultado;
 
-        Mockito.when(productoDaoMock.save(Mockito.<AltaProductoDto>any())).thenReturn(productoOriginal);
+        Mockito.when(productoDaoMock.save(Mockito.<AltaProductoDto>any(), Mockito.<Categoria>any())).thenReturn(productoOriginal);
         Mockito.when(productoDaoMock.findById(Mockito.<UUID>any())).thenReturn(productoOriginal);
-        Mockito.when(productoDaoMock.update(Mockito.<AltaProductoDto>any(), Mockito.<UUID>any())).thenReturn(productoModificado);
+        Mockito.when(productoDaoMock.update(Mockito.<AltaProductoDto>any(), Mockito.<Categoria>any(), Mockito.<UUID>any())).thenReturn(productoModificado);
 
         try {
             Producto creado = business.crearProducto(altaProductoDto);
             resultado = business.updateProducto(altaProductoDto, id);
-        } catch (ItemNotFoundException err) {
+        } catch (ItemNotFoundException | ItemExistsException err) {
           throw new ItemNotFoundException("Producto no encontrado.");
         }
 
@@ -75,7 +79,7 @@ public class ProductoBusinessTest {
         assertEquals(resultado.getNombre(), updateProductoDto.getNombre());
         assertEquals(resultado.getMarca(), updateProductoDto.getMarca());
         assertEquals(resultado.getPrecio(), updateProductoDto.getPrecio());
-        assertEquals(resultado.getCategoria(), updateProductoDto.getCategoria());
+        assertEquals(resultado.getCategoria(), categoria);
         assertEquals(resultado.getDescripcion(), updateProductoDto.getDescripcion());
     }
 
@@ -83,7 +87,8 @@ public class ProductoBusinessTest {
     @Test
     public void borrarProductoBusinessTest() throws ItemNotFoundException {
         String id = "d84338d4-9b3c-11ee-b9d1-0242ac120002";
-        Producto producto= new Producto("Codigo", "Producto", "Marca", 199.99, "Hogar", "Descripcion");
+        Categoria categoria = new Categoria("Hogar", "Todo para el Hogar");
+        Producto producto= new Producto("Codigo", "Producto", "Marca", 199.99, categoria, "Descripcion");
         producto.setId(UUID.fromString(id));
 
         Mockito.when(productoDaoMock.findById(Mockito.<UUID>any())).thenReturn(producto);

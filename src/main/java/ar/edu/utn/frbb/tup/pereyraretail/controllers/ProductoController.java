@@ -57,7 +57,7 @@ public class ProductoController {
 
     @Operation(summary = "Agregar productos mock al listado de productos")
     @GetMapping("/mock")
-    public ResponseEntity<ArrayList<Producto>> agregarMockProductos () {
+    public ResponseEntity<ArrayList<Producto>> agregarMockProductos () throws ItemExistsException, ItemNotFoundException {
         ArrayList<Producto> productos = productoBusiness.mockProductos();
         return ResponseEntity.status(HttpStatus.CREATED).body(productos);
     }
@@ -65,7 +65,7 @@ public class ProductoController {
     @Operation(summary = "Crear un producto")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Producto> productoCrear (
-            @Valid @RequestBody AltaProductoDto dto) {
+            @Valid @RequestBody AltaProductoDto dto) throws ItemExistsException, ItemNotFoundException {
         Producto producto = productoBusiness.crearProducto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(producto);
     }

@@ -30,10 +30,10 @@ public class CategoriaBusinessImpl implements CategoriaBusiness {
     }
 
     @Override
-    public Categoria getCategoriaNombre(String nombre) throws ItemNotFoundException {
+    public Categoria getCategoriaNombre(String categoriaNombre) throws ItemNotFoundException {
         ArrayList<Categoria> categorias = categoriaDao.listAll();
         for(Categoria categoria: categorias) {
-            if (categoria.getNombre().equals(nombre)) {
+            if (categoria.getNombre().equals(categoriaNombre)) {
                 return categoria;
             }
         }

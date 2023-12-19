@@ -58,4 +58,17 @@ public class Categoria {
 	public Categoria(String nombre) {
 		this(nombre, "");
 	}
+
+	public boolean equalsIgnoreCase(String categoria) {
+		return Objects.equals(this.nombre, categoria);
+	}
+
+	@Override
+	public String toString() {
+		return "Categoria{" +
+				"id=" + id +
+				", nombre='" + nombre + '\'' +
+				", descripcion='" + descripcion + '\'' +
+				'}';
+	}
 }

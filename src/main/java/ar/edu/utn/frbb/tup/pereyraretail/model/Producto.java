@@ -9,12 +9,12 @@ public class Producto {
     private String codigo;
     private String nombre;
     private String marca;
-    private String categoria;
+    private Categoria categoria;
     private Double precio;
     private String descripcion;
     private ArrayList<Especificacion> specs;
 
-    public Producto(String codigo, String nombre, String marca, Double precio, String categoria, String descripcion, ArrayList<Especificacion> specs) {
+    public Producto(String codigo, String nombre, String marca, Double precio, Categoria categoria, String descripcion, ArrayList<Especificacion> specs) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
@@ -25,12 +25,12 @@ public class Producto {
         this.id = UUID.randomUUID();
     }
 
-    public Producto(String codigo, String nombre, String marca, Double precio, String categoria, String descripcion) {
+    public Producto(String codigo, String nombre, String marca, Double precio, Categoria categoria, String descripcion) {
         this(codigo, nombre, marca, precio, categoria, descripcion, new ArrayList<>());
     }
 
     public Producto(String codigo, String nombre, String marca, Double precio) {
-        this(codigo, nombre, marca, precio, "", "", new ArrayList<>());
+        this(codigo, nombre, marca, precio, null, "", new ArrayList<>());
     }
 
     public Producto(){
@@ -69,11 +69,11 @@ public class Producto {
         this.marca = marca;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
@@ -88,28 +88,26 @@ public class Producto {
     public String getDescripcion() {
         return descripcion;
     }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
     public void setSpecs(ArrayList<Especificacion> specs) {
         this.specs = specs;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public ArrayList<Especificacion> getSpecsList() {
+    public ArrayList<Especificacion> getSpecs() {
         return specs;
     }
 
-    public void setSpecsList(ArrayList<Especificacion> specs) {
-        this.specs = specs;
-    }
-
-    public Especificacion getSpecById(int id) {
-        return specs.get(id);
-    }
-
-    public void setSpec(Especificacion spec) {
+    public void addSpec(Especificacion spec) {
         this.specs.add(spec);
+    }
+    public void borrarSpec(String specNombre) {
+        for(Especificacion spec: specs) {
+            if(spec.getNombre().equals(specNombre)) {
+                this.specs.remove(spec);
+            }
+        }
     }
 
     @Override
